@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # tags, for the Full Changelog link
+
+      - name: Check the tag
+        id: version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]] \
+            || { echo "::error::'$version' is not SemVer"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Release notes + Full Changelog link
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          notes=".github/release-notes/$TAG.md"
+          [[ -f "$notes" ]] || { echo "::error::missing $notes"; exit 1; }
+          # previous version tag in history; a stable release skips pre-releases (tags with "-")
+          stable=(); [[ "$TAG" == *-* ]] || stable=(--exclude '*-*')
+          prev="$(git describe --tags --abbrev=0 --match 'v[0-9]*' --exclude "$TAG" "${stable[@]}" "$TAG" 2>/dev/null || true)"
+          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          if [[ -n "$prev" ]]; then link="$base/compare/$prev...$TAG"; else link="$base/commits/$TAG"; fi
+          { cat "$notes"; printf '\n**Full Changelog**: %s\n' "$link"; } > release-notes.md
+          cat release-notes.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Create as a draft, then publish: repos with immutable releases lock a
+      # release when it's published.
+      - uses: softprops/action-gh-release@v3
+        id: release
+        with:
+          name: CameraRefreshFix v${{ steps.version.outputs.version }}
+          body_path: release-notes.md
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          draft: true
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+        run: gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" -F draft=false --jq .html_url
