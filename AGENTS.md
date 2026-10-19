@@ -20,7 +20,7 @@ docker run --rm -v "$PWD:/work" -v crf-gradle:/root/.gradle camerarefreshfix-bui
 
 - `app/src/main/kotlin/dev/etcherfx/camerarefreshfix/core/`: pure logic, no Android or Xposed types: `Settings` (pref keys and defaults), `RefreshDecision`, `OnceLogger`.
 - `.../xposed/`: runs in `system_server`. `ModuleEntry` (entry point), `FrameworkTargets` (reflective resolution, plain reflection so it's unit-testable), `HookInstaller` (the three hooks), `PrefsBridge` (remote preferences into a volatile `Settings`).
-- `.../ModuleApp.kt`, `.../SettingsActivity.kt`: the settings screen, opened from the Xposed manager (`MODULE_SETTINGS` category, no launcher icon).
+- `.../ModuleApp.kt`, `.../SettingsActivity.kt`: the settings screen, a Compose Material 3 Expressive screen (Material3 1.5 beta; move to stable when released), opened from the Xposed manager (`MODULE_SETTINGS` category, no launcher icon).
 - `app/src/main/resources/META-INF/xposed/`: `java_init.list`, `scope.list`, `module.prop` (modern-API module metadata).
 - `app/src/test/`: JVM unit tests; `xposed/fakes/` holds stand-ins for the framework classes.
 - `docker/Dockerfile`: the build environment.

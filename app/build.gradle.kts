@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
 
 val moduleVersion = providers.gradleProperty("version").get()
@@ -45,6 +46,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     compileOptions {
@@ -69,5 +71,7 @@ kotlin {
 dependencies {
     compileOnly(libs.libxposed.api)
     implementation(libs.libxposed.service)
+    implementation(libs.compose.material3)
+    implementation(libs.activity.compose)
     testImplementation(libs.junit)
 }
