@@ -10,7 +10,14 @@ Use the issue forms for bugs and feature requests. For a security problem, see [
 
 ## Development
 
-Build and test commands will live in [AGENTS.md](AGENTS.md) once the implementation lands. Everything Android-related runs inside a Docker container that carries the Android SDK.
+Everything Android-related runs inside a Docker container that carries the Android SDK and JDK 21, so the host needs only Docker:
+
+```sh
+docker build -t camerarefreshfix-build docker
+docker run --rm -v "$PWD:/work" -v crf-gradle:/root/.gradle camerarefreshfix-build ./gradlew check assembleDebug assembleRelease
+```
+
+`check` runs the unit tests and lint. The debug APK lands in `app/build/outputs/apk/debug/`. A hook change also needs a test on a device or emulator with an Xposed framework that implements libxposed API 101 or newer. [AGENTS.md](AGENTS.md) has the code map and the rules hooks must follow.
 
 ## Pull requests
 
@@ -28,7 +35,9 @@ git tag -m vX.Y.Z vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-The release workflow checks that the tag is valid SemVer, appends the Full Changelog link to the notes, and publishes the release.
+The version lives in `gradle.properties` (`version=X.Y.Z`); bump it in the release commit. The release workflow checks that the tag matches it, runs the same checks as CI, signs the APK, appends the Full Changelog link to the notes, attaches `CameraRefreshFix-X.Y.Z.apk` to a draft and publishes it. Run it from the Actions tab (`workflow_dispatch`) for a dry run that builds without publishing.
+
+Signing uses three repository secrets: `RELEASE_KEYSTORE_BASE64` (the PKCS12 keystore, base64-encoded), `RELEASE_KEYSTORE_PASSWORD` (store and key password) and `RELEASE_KEY_ALIAS`. The workflow fails early if any is missing. The key must never change: Android refuses an update signed with a different key.
 
 ## Licensing
 
