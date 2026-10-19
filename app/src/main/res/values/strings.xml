@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">CameraRefreshFix</string>
+    <string name="module_description">Keeps the display at full refresh rate when a floating picture-in-picture camera window would cap it at 60 Hz.</string>
+
+    <string name="ignore_pinned_title">Ignore picture-in-picture windows</string>
+    <string name="ignore_pinned_summary">Floating windows no longer set a refresh-rate limit for the whole display. Full-screen camera apps keep the stock camera cap. Applies immediately.</string>
+    <string name="remove_cap_title">Remove the camera cap</string>
+    <string name="remove_cap_summary">Android caps the display at 60 Hz while an app uses the camera, to avoid dropped camera frames. This removes the cap for every app, including full-screen camera apps. Applies the next time an app turns its camera on.</string>
+
+    <string name="status_connected">Connected to %1$s %2$s (API %3$d).</string>
+    <string name="status_inactive">Module not active: enable it in your Xposed manager with the System Framework scope, then reboot.</string>
+    <string name="status_missing_scope">The System Framework is not in the module\'s scope: add it in your Xposed manager, then reboot.</string>
+    <string name="status_no_remote_prefs">This framework does not support remote preferences, so these settings cannot be saved.</string>
+    <string name="status_error">Could not talk to the Xposed framework: %1$s</string>
+</resources>
