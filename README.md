@@ -6,6 +6,7 @@
 
 <img alt="kotlin" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/kotlin_vector.svg">
 
+[![Release](https://img.shields.io/github/v/release/etcherfx/CameraRefreshFix?style=for-the-badge)](https://github.com/etcherfx/CameraRefreshFix/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/etcherfx/CameraRefreshFix/ci.yml?style=for-the-badge)](https://github.com/etcherfx/CameraRefreshFix/actions/workflows/ci.yml)
 
 **An Xposed module that keeps Android at full refresh rate when a floating camera window would cap it.**
