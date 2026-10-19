@@ -55,6 +55,8 @@ android {
     lint {
         warningsAsErrors = true
         abortOnError = true
+        // No app icon on purpose: Android shows its default icon in the Xposed manager.
+        disable += "MissingApplicationIcon"
     }
 }
 
