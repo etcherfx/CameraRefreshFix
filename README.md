@@ -11,7 +11,7 @@
 
 **An Xposed module that keeps Android at full refresh rate when a floating camera window would cap it.**
 
-[Getting started](#getting-started) · [Settings](#settings) · [The problem](#the-problem) · [Compatibility](#compatibility)
+[Getting started](#getting-started) · [Settings](#settings) · [How it works](#how-it-works) · [Compatibility](#compatibility)
 
 </div>
 
@@ -41,7 +41,7 @@ Open the settings from the module's entry in your Xposed manager; the module has
 | Ignore picture-in-picture windows | On | A floating (pinned) window no longer sets the refresh-rate range for the whole display | Immediately |
 | Remove the camera cap | Off | No app is capped at 60 Hz while it uses the camera, full-screen camera apps included | The next time an app turns its camera on; a camera already running keeps its cap until it stops |
 
-## The problem
+## How it works
 
 When an app uses the camera, Android's `CameraServiceProxy` registers a refresh-rate range of at most 60 Hz for that package through `WindowManagerInternal.addRefreshRateRangeForPackage`. `DisplayContent` then walks the windows from top to bottom, and the first visible window with a nonzero preferred minimum or maximum refresh rate sets the range for the whole display.
 
