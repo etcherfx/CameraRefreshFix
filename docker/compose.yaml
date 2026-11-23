@@ -1,0 +1,20 @@
+# Runs the full check from the repo root in any shell, with no shell variables:
+#
+#   docker compose -f docker/compose.yaml run --rm --build check
+name: camerarefreshfix-check
+
+services:
+  check:
+    build: .
+    image: camerarefreshfix-build
+    volumes:
+      - ..:/work
+      - gradle-cache:/root/.gradle
+      - android-debug-key:/root/.android
+    command: ./gradlew check assembleDebug assembleRelease
+
+volumes:
+  gradle-cache:
+    name: crf-gradle
+  android-debug-key:
+    name: android-debug-key

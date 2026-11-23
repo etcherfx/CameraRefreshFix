@@ -17,6 +17,8 @@ docker build -t camerarefreshfix-build docker
 docker run --rm -v "$PWD:/work" -v crf-gradle:/root/.gradle camerarefreshfix-build ./gradlew check assembleDebug assembleRelease
 ```
 
+In any shell, including cmd.exe, `docker compose -f docker/compose.yaml run --rm --build check` builds the image and runs the same check from the repo root.
+
 `check` runs the unit tests and lint. The debug APK lands in `app/build/outputs/apk/debug/`. A hook change also needs a test on a device or emulator with an Xposed framework that implements libxposed API 101 or newer. [AGENTS.md](AGENTS.md) has the code map and the rules hooks must follow.
 
 ## Pull requests
